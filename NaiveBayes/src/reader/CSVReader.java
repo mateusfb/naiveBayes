@@ -20,10 +20,12 @@ public class CSVReader implements Reader {
 		
 		BufferedReader br = new BufferedReader(new FileReader(path));
 		
+		br.readLine();
+		
 		while((row = br.readLine()) != null) {
 			data = row.split(",");
 			
-			attributes = new ArrayList<String>(Arrays.asList((Arrays.copyOfRange(data, 0 , data.length - 2)))); 
+			attributes = new ArrayList<String>(Arrays.asList((Arrays.copyOfRange(data, 0 , data.length - 1)))); 
 			label = data[data.length - 1];
 			
 			dataset.getInstances().add(new ObjectInstance(attributes, label));

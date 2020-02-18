@@ -11,6 +11,15 @@ public class Dataset {
 		this.path = path;
 		this.instances = new ArrayList<ObjectInstance>();
 	}
+	
+	public String toString() {
+		String row = "";
+		
+		for(int i = 0; i < instances.size(); i++) {
+			row += instances.get(i).getAttributes().toString() + instances.get(i).getLabel() + "\n";
+		}
+		return row;
+	}
 
 	public ArrayList<ObjectInstance> getInstances() {
 		return instances;
