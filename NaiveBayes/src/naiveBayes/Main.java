@@ -15,11 +15,13 @@ public class Main {
 		CSVReader csvReader = new CSVReader();
 		datasetCsv = csvReader.read("src/resources/iris.csv");
 		System.out.println(datasetCsv);
+		//System.out.println(datasetCsv.getNumClass());
 		
 		System.out.println("-----------------ARFF-----------------");
 		ARFFReader arffReader = new ARFFReader();
 		datasetArff = arffReader.read("src/resources/iris.arff");
 		System.out.println(datasetArff);
+		//System.out.println(datasetArff.getNumClass());
 	}
 
 }

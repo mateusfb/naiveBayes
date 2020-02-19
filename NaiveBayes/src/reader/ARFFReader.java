@@ -11,7 +11,7 @@ import naiveBayes.ObjectInstance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader.ArffReader;
 
-public class ARFFReader implements Reader {
+public class ARFFReader extends Reader {
 
 	@Override
 	public Dataset read(String path) throws IOException {
@@ -21,6 +21,7 @@ public class ARFFReader implements Reader {
 		
 		Instances data = arff.getData();
 		String[] attributes = new String[data.numAttributes() - 1];
+		String[] dataTypes = new String[data.numAttributes() -1];
 		
 		if(data.classIndex() == -1) {
 			data.setClassIndex(data.numAttributes() - 1);
@@ -33,6 +34,17 @@ public class ARFFReader implements Reader {
 			}
 			dataset.getInstances().add(new ObjectInstance(new ArrayList<String>(Arrays.asList(attributes)), String.valueOf(data.get(i).value(data.classIndex()))));
 		}
+		
+		for(int i = 0; i < dataTypes.length; i++) {
+			if(data.get(0).attribute(i).isNumeric()) {
+				dataTypes[i] = "number";
+			}else {
+				dataTypes[i] = "name";
+			}
+		}
+		
+		dataset.setDataTypes(dataTypes);
+		dataset.setNumClass(data.numClasses());
 		
 		return dataset;
 	}
