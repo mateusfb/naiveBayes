@@ -45,7 +45,6 @@ public class ARFFReader extends Reader {
 		
 		dataset.setDataTypes(dataTypes);
 		dataset.setNumClass(data.numClasses());
-		
 		return dataset;
 	}
 
