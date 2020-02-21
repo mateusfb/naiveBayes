@@ -37,7 +37,7 @@ public class ARFFReader extends Reader {
 		
 		for(int i = 0; i < dataTypes.length; i++) {
 			if(data.get(0).attribute(i).isNumeric()) {
-				dataTypes[i] = "number";
+				dataTypes[i] = "num";
 			}else {
 				dataTypes[i] = "name";
 			}
