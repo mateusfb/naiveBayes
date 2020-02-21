@@ -2,26 +2,22 @@ package naiveBayes;
 
 import java.io.IOException;
 
-import reader.ARFFReader;
 import reader.CSVReader;
 
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-		Dataset datasetArff;
 		Dataset datasetCsv;
+		NaiveBayes nb = new NaiveBayes();
 		
 		System.out.println("-----------------CSV-----------------");
 		CSVReader csvReader = new CSVReader();
 		datasetCsv = csvReader.read("src/resources/iris.csv");
 		System.out.println(datasetCsv);
-		//System.out.println(datasetCsv.getNumClass());
 		
-		System.out.println("-----------------ARFF-----------------");
-		ARFFReader arffReader = new ARFFReader();
-		datasetArff = arffReader.read("src/resources/iris.arff");
-		System.out.println(datasetArff);
-		//System.out.println(datasetArff.getNumClass());
+		nb.buildClassifier(datasetCsv);
+		nb.test(datasetCsv, new double[] {5.7,2.9,4.2,1.3});
+
 	}
 
 }

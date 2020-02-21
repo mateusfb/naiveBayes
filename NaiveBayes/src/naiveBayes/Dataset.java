@@ -8,6 +8,8 @@ public class Dataset {
 	private String path;
 	private String[] dataTypes;
 	private int numClass;
+	@SuppressWarnings("unused")
+	private int numAttributes;
 	
 	public Dataset(String path) {
 		this.path = path;
@@ -53,5 +55,9 @@ public class Dataset {
 	
 	public void setNumClass(int numClass) {
 		this.numClass = numClass;
+	}
+	
+	public int getNumAttributes() {
+		return this.instances.get(0).getAttributes().size();
 	}
 }
