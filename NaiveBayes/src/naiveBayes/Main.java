@@ -16,7 +16,6 @@ public class Main {
 		System.out.println(datasetCsv);
 		
 		nb.buildClassifier(datasetCsv);
-		nb.test(datasetCsv, new double[] {5.7,2.9,4.2,1.3});
 
 	}
 

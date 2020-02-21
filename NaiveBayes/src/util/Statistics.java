@@ -16,15 +16,16 @@ public class Statistics {
 		double mean = Statistics.mean(values);
 		double sum = 0;
 		
-		for(double value: values) {
-			sum += Math.pow(value - mean, 2);
+		for(int i = 0; i < values.length; i++) {
+			sum += Math.pow(values[i] - mean, 2);
 		}
 
 		return Math.sqrt(sum / values.length);
 	}
 	
 	public static double gaussianPdf(double attribute, double mean, double stdev) {
-		return (1/Math.sqrt(2*Math.PI)*stdev)*Math.exp(-Math.pow((attribute-mean), 2)/2*Math.pow(stdev, 2));
+		double exp = Math.exp(-Math.pow((attribute-mean), 2)/2*Math.pow(stdev, 2));
+		return (1/Math.sqrt(2*Math.PI)*stdev)*exp;
 	}
 	
 	public static double multiplyArray(double[] values) {

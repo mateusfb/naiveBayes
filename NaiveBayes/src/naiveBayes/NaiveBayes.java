@@ -75,6 +75,8 @@ public class NaiveBayes {
 			}
 			
 			classProbabilities[i] = Statistics.multiplyArray(attributeProbabilities) * classOccurances.get(classes[i]) / dataset.getInstances().size();
+			//System.out.println(classProbabilities[i]);
+			//System.out.println(classes[i]);
 		}
 	}
 }
