@@ -12,11 +12,11 @@ public class Main {
 		
 		System.out.println("-----------------CSV-----------------");
 		CSVReader csvReader = new CSVReader();
-		datasetCsv = csvReader.read("src/resources/iris.csv");
+		datasetCsv = csvReader.read("src/resources/PlayGolf.csv");
 		System.out.println(datasetCsv);
 		
 		nb.buildClassifier(datasetCsv);
-		nb.test(datasetCsv, new double[] {4.7,3.2,1.6,0.2});
+		nb.test(datasetCsv, new String[] {"Rainy", "Hot", "High"});
 		
 	}
 

@@ -10,12 +10,13 @@ import java.util.HashSet;
 import naiveBayes.Dataset;
 import naiveBayes.ObjectInstance;
 
-public class CSVReader extends Reader {
+public class CSVReader implements Reader {
 
 	@Override
 	public Dataset read(String path) throws IOException {
 		String row, label;
-		String[] data, dataTypes;
+		String[] data;
+		int[] dataTypes;
 		ArrayList<String> attributes;
 		HashSet<String> set = new HashSet<String>();
 		Dataset dataset = new Dataset(path);
@@ -35,13 +36,13 @@ public class CSVReader extends Reader {
 			dataset.getInstances().add(new ObjectInstance(attributes, label));
 		}
 		
-		dataTypes = new String[data.length - 1];
+		dataTypes = new int[data.length - 1];
 		
 		for(int i = 0; i < dataTypes.length; i++) {
 			if(isNumeric(data[i])) {
-				dataTypes[i] = "number";
+				dataTypes[i] = 0;
 			}else {
-				dataTypes[i] = "name";
+				dataTypes[i] = 1;
 			}
 		}
 		
@@ -50,5 +51,17 @@ public class CSVReader extends Reader {
 		dataset.setNumClass(set.size());
 		
 		return dataset;
+	}
+	
+	public boolean isNumeric(String str) {
+		for(int i = 0; i < str.length(); i++) {
+			if(!(Character.isDigit(str.charAt(i)))) {
+				if(str.charAt(i) != '.') {
+					return false;
+				}
+			}
+		}
+		
+		return true;
 	}
 }

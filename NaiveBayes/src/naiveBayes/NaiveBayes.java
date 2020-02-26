@@ -59,7 +59,19 @@ public class NaiveBayes {
 		return statistics;
 	}
 	
-	public void test(Dataset dataset, double[] tested) {
+	public double probabilityOfNominalAttribute(ArrayList<ObjectInstance> classInstances, int column, String attribute) {
+		double count = 0;
+		
+		for(ObjectInstance instance: classInstances) {
+			if(instance.getAttributes().get(column).equals(attribute)){
+				count++;
+			}
+		}
+		
+		return count / (double) classInstances.size();
+	}
+	
+	public void test(Dataset dataset, String[] tested) {
 		double[] classProbabilities = new double[dataset.getNumClass()];
 		double[] attributeProbabilities = new double[dataset.getNumAttributes()];
 		double[] statistics;
@@ -67,24 +79,24 @@ public class NaiveBayes {
 		
 		for(int i = 0; i < dataset.getNumClass(); i++) { //i representa as classes
 			for(int j = 0; j < dataset.getNumAttributes(); j++) { //j representa os atributos
-				statistics = statisticsByColumn(separated.get(i), j, classes[i]);
-				//System.out.println(statistics[0]);
-				//System.out.println(statistics[1]);
-				attributeProbabilities[j] = Statistics.gaussianPdf(tested[j], statistics[0], statistics[1]);
-				//System.out.println(attributeProbabilities[j]);
+				if(dataset.getDataTypes()[j] == 0) {
+					statistics = statisticsByColumn(separated.get(i), j, classes[i]);
+					attributeProbabilities[j] = Statistics.gaussianPdf(Double.parseDouble(tested[j]), statistics[0], statistics[1]);
+				} else {
+					attributeProbabilities[j] = probabilityOfNominalAttribute(separated.get(i), j, tested[j]);
+				}
 			}
-			
 			classProbabilities[i] = Statistics.multiplyArray(attributeProbabilities) * ((double)classOccurances.get(classes[i]) / dataset.getInstances().size());
-			//System.out.println(Statistics.multiplyArray(attributeProbabilities));
-			//System.out.println(classProbabilities[i]);
-			//System.out.println(classes[i]);
 		}
 		
+		printResult(classProbabilities);
+	}
+	
+	public void printResult(double[] classProbabilities) {
 		double sum = Statistics.sumArray(classProbabilities);
 		
-		//int maxIdx = Statistics.findMaxIdx(classProbabilities);
-		System.out.println(classes[0] + ": " + (classProbabilities[0] / sum)*100);
-		System.out.println(classes[1] + ": " + (classProbabilities[1] / sum)*100);
-		System.out.println(classes[2] + ": " + (classProbabilities[2] / sum)*100);
+		for(int i = 0; i < classes.length; i++) {
+			System.out.println(classes[i] + ": " + (classProbabilities[i] / sum)*100 + "%");
+		}
 	}
 }
