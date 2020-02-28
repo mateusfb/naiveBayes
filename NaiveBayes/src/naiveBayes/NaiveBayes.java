@@ -81,8 +81,6 @@ public class NaiveBayes {
 			for(int j = 0; j < dataset.getNumAttributes(); j++) { //j representa os atributos
 				if(dataset.getDataTypes()[j] == 0) {
 					statistics = statisticsByColumn(separated.get(i), j);
-					System.out.println(statistics[0]);
-					System.out.println(statistics[1]);
 					attributeProbabilities.add(Statistics.gaussianPdf(Double.parseDouble(tested[j]), statistics[0], statistics[1]));
 				} else {
 					attributeProbabilities.add(probabilityOfNominalAttribute(separated.get(i), j, tested[j]));

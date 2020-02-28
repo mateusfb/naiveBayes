@@ -24,7 +24,7 @@ public class Statistics {
 			sum += Math.pow(values[i] - mean, 2);
 		}
 
-		return Math.sqrt(sum / values.length);
+		return Math.sqrt(sum / (values.length - 1));
 	}
 	
 	public static double stdev(ArrayList<Double> values) {
@@ -32,10 +32,10 @@ public class Statistics {
 		double sum = 0;
 		
 		for(Double value : values) {
-			sum += Math.pow(value - mean, 2) / values.size();
+			sum += Math.pow(value - mean, 2);
 		}
 		
-		return Math.sqrt(sum);
+		return Math.sqrt(sum / (values.size() - 1));
 	}
 	
 	public static double gaussianPdf(double attribute, double mean, double stdev) {

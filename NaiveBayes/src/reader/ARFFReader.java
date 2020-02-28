@@ -30,7 +30,12 @@ public class ARFFReader implements Reader {
 		for(int i = 0; i < data.numInstances(); i++) {
 		
 			for(int j = 0; j < data.numAttributes() -1; j++) {
-				attributes[j] = String.valueOf(data.get(i).value(j));
+				if(data.get(i).attribute(j).isNumeric()) {
+					attributes[j] = String.valueOf(data.get(i).value(j));
+				} else {
+					attributes[j] = data.get(i).stringValue(j);
+				}
+				
 			}
 			dataset.getInstances().add(new ObjectInstance(new ArrayList<String>(Arrays.asList(attributes)), String.valueOf(data.get(i).value(data.classIndex()))));
 		}
