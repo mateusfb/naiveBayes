@@ -49,6 +49,7 @@ public class CSVReader implements Reader {
 		br.close();
 		dataset.setDataTypes(dataTypes);
 		dataset.setNumClass(set.size());
+		dataset.setNumAttributes(dataTypes.length);
 		
 		return dataset;
 	}

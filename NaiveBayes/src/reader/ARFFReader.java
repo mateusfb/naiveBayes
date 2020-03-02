@@ -50,6 +50,7 @@ public class ARFFReader implements Reader {
 		
 		dataset.setDataTypes(dataTypes);
 		dataset.setNumClass(data.numClasses());
+		dataset.setNumAttributes(data.numAttributes() - 1);
 		return dataset;
 	}
 

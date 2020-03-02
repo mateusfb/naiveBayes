@@ -8,7 +8,6 @@ public class Dataset {
 	private String path;
 	private int[] dataTypes;
 	private int numClass;
-	@SuppressWarnings("unused")
 	private int numAttributes;
 	
 	public Dataset(String path) {
@@ -45,8 +44,8 @@ public class Dataset {
 		return this.dataTypes;
 	}
 	
-	public void setDataTypes(int[] dataTypes2) {
-		this.dataTypes = dataTypes2;
+	public void setDataTypes(int[] dataTypes) {
+		this.dataTypes = dataTypes;
 	}
 	
 	public int getNumClass() {
@@ -58,6 +57,10 @@ public class Dataset {
 	}
 	
 	public int getNumAttributes() {
-		return this.instances.get(0).getAttributes().size();
+		return this.numAttributes;
+	}
+	
+	public void setNumAttributes(int numAttributes) {
+		this.numAttributes = numAttributes;
 	}
 }
