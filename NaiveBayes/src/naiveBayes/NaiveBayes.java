@@ -1,7 +1,9 @@
 package naiveBayes;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Random;
 
 import util.Statistics;
 
@@ -221,5 +223,42 @@ public class NaiveBayes {
 		
 		System.out.println("correct: " + correct / dataset.getInstances().size());
 		System.out.println("incorrect: " + incorrect / dataset.getInstances().size());
+	}
+	
+	public void splitTest(Dataset dataset) {
+		ArrayList<ObjectInstance> shuffle = dataset.getInstances();
+		Collections.shuffle(shuffle, new Random(1));
+		
+		int trainSize = (2*shuffle.size())/3;
+		
+		ArrayList<ObjectInstance> trainInstances = new ArrayList<ObjectInstance>(shuffle.subList(0, trainSize));
+		ArrayList<ObjectInstance> testInstances = new ArrayList<ObjectInstance>(shuffle.subList(trainSize, shuffle.size()));
+		
+		Dataset trainSet = new Dataset("null");
+		trainSet.setInstances(trainInstances);
+		trainSet.setDataTypes(dataset.getDataTypes());
+		trainSet.setNumAttributes(dataset.getNumAttributes());
+		trainSet.setNumClass(dataset.getNumClass());
+		System.out.println(trainSet);
+		
+		double correct = 0;
+		double incorrect = 0;
+		
+		for(ObjectInstance instance : testInstances) {
+			String[] attributes = new String[trainSet.getNumAttributes()];
+			attributes = instance.getAttributes().toArray(attributes);
+			ArrayList<Double> instanceProbabilities = calculateClassProbabilities(trainSet, attributes);
+			
+			int maxIdx = Statistics.findMaxIdx(instanceProbabilities);
+			
+			if(instance.getLabel().equals(classes[maxIdx])) {
+				correct++;
+			} else {
+				incorrect++;
+			}
+		}
+		
+		System.out.println("correct: " + correct / testInstances.size());
+		System.out.println("incorrect: " + incorrect / testInstances.size());
 	}
 }
