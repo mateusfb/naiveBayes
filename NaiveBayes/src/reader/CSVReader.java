@@ -40,7 +40,7 @@ public class CSVReader implements Reader {
 		
 		for(int i = 0; i < dataTypes.length; i++) {
 			if(isNumeric(data[i])) {
-				dataTypes[i] = 0;
+				dataTypes[i] = 1;
 			}else {
 				dataTypes[i] = 1;
 			}

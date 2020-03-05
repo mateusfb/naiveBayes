@@ -42,7 +42,7 @@ public class ARFFReader implements Reader {
 		
 		for(int i = 0; i < dataTypes.length; i++) {
 			if(data.get(0).attribute(i).isNumeric()) {
-				dataTypes[i] = 0;
+				dataTypes[i] = 1;
 			}else {
 				dataTypes[i] = 1;
 			}

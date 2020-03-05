@@ -14,7 +14,7 @@ public class Main {
 		//System.out.println("-----------------CSV-----------------");
 		CSVReader csvReader = new CSVReader();
 		//datasetCsv = csvReader.read("src/resources/PlayGolf.csv");
-		datasetCsv = csvReader.read("src/resources/iris.csv");
+		datasetCsv = csvReader.read("src/resources/nursery_data.csv");
 		//datasetCsv = csvReader.read("src/resources/teste.csv");
 		//System.out.println(datasetCsv);
 		
