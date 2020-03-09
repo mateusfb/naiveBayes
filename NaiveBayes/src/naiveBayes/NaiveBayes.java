@@ -139,7 +139,7 @@ public class NaiveBayes {
 			}
 		}
 		
-		return count / (double) classInstances.size();
+		return count / classInstances.size();
 	}
 	
 	/**
@@ -148,11 +148,11 @@ public class NaiveBayes {
 	 * @param tested String[] - Vetor contendo os valores de atributo da nova instancia
 	 * @return ArrayList<Double> - Lista de probabilidades para as classes
 	 */
-	public ArrayList<Double> calculateClassProbabilities(Dataset dataset, String[] tested) {
+	public ArrayList<Double> calculateClassProbabilities(Dataset dataset, String[] tested, ArrayList<ArrayList<ObjectInstance>> separated) {
 		ArrayList<Double> classProbabilities = new ArrayList<Double>(); //> Armazena as probabilidades da nova instancia pertencer as classes do dataset
 		ArrayList<Double> attributeProbabilities = new ArrayList<Double>(); //> Armazena temporariamente as probabilidades para cada atributo da instancia, dadas as classes
 		double[] statistics;
-		ArrayList<ArrayList<ObjectInstance>> separated = separateByClass(dataset);
+		//ArrayList<ArrayList<ObjectInstance>> separated = separateByClass(dataset);
 		
 		// Definindo a classe C a ser comparada
 		for(int i = 0; i < dataset.getNumClass(); i++) {
@@ -182,7 +182,7 @@ public class NaiveBayes {
 	 * @param tested - Vetor contendo os valores de atributo da nova instancia
 	 */
 	public void classify(Dataset dataset, String[] tested) {
-		printResult(calculateClassProbabilities(dataset, tested));
+		printResult(calculateClassProbabilities(dataset, tested, separateByClass(dataset)));
 	}
 	
 	/**
@@ -199,37 +199,14 @@ public class NaiveBayes {
 
 	
 	/**
-	 * Testa a acuracia do classificador sobre um dataset, de forma simplificada
+	 * Testa a acuracia do classificador sobre um dataset, através de um split
 	 * @param dataset Dataset - Dataset a ser operado
 	 */
-	public void test(Dataset dataset) {
-		double correct = 0; //> Numero de instancias classificadas corretamente
-		double incorrect = 0; //> Numero de instancias classificadas incorretamente
-		
-		// Classificando cada instancia do dataset e checando se acertou
-		for(ObjectInstance instance : dataset.getInstances()) {
-			String[] attributes = new String[dataset.getNumAttributes()];
-			attributes = instance.getAttributes().toArray(attributes);
-			ArrayList<Double> instanceProbabilities = calculateClassProbabilities(dataset, attributes);
-			
-			int maxIdx = Statistics.findMaxIdx(instanceProbabilities);
-			
-			if(instance.getLabel().equals(classes[maxIdx])) {
-				correct++;
-			} else {
-				incorrect++;
-			}
-		}
-		
-		System.out.println("correct: " + correct / dataset.getInstances().size());
-		System.out.println("incorrect: " + incorrect / dataset.getInstances().size());
-	}
-	
 	public void splitTest(Dataset dataset) {
 		ArrayList<ObjectInstance> shuffle = dataset.getInstances();
 		Collections.shuffle(shuffle, new Random(1));
 		
-		int trainSize = (2*shuffle.size())/3;
+		int trainSize = (66*shuffle.size())/100;
 		
 		ArrayList<ObjectInstance> trainInstances = new ArrayList<ObjectInstance>(shuffle.subList(0, trainSize));
 		ArrayList<ObjectInstance> testInstances = new ArrayList<ObjectInstance>(shuffle.subList(trainSize, shuffle.size()));
@@ -244,10 +221,12 @@ public class NaiveBayes {
 		double correct = 0;
 		double incorrect = 0;
 		
+		ArrayList<ArrayList<ObjectInstance>> separated = separateByClass(trainSet);
+		
 		for(ObjectInstance instance : testInstances) {
 			String[] attributes = new String[trainSet.getNumAttributes()];
 			attributes = instance.getAttributes().toArray(attributes);
-			ArrayList<Double> instanceProbabilities = calculateClassProbabilities(trainSet, attributes);
+			ArrayList<Double> instanceProbabilities = calculateClassProbabilities(trainSet, attributes, separated);
 			
 			int maxIdx = Statistics.findMaxIdx(instanceProbabilities);
 			
@@ -258,7 +237,7 @@ public class NaiveBayes {
 			}
 		}
 		
-		System.out.println("correct: " + correct / testInstances.size());
-		System.out.println("incorrect: " + incorrect / testInstances.size());
+		System.out.println("correct: " + correct / testInstances.size() + "%" + " (" + correct + ")");
+		System.out.println("incorrect: " + incorrect / testInstances.size() + "%" + " (" + incorrect + ")");
 	}
 }

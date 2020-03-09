@@ -9,19 +9,15 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 		Dataset datasetCsv;
-		//Dataset datasetArff;
 		
-		//System.out.println("-----------------CSV-----------------");
 		CSVReader csvReader = new CSVReader();
 		//datasetCsv = csvReader.read("src/resources/PlayGolf.csv");
 		datasetCsv = csvReader.read("src/resources/nursery_data.csv");
-		//datasetCsv = csvReader.read("src/resources/teste.csv");
 		//System.out.println(datasetCsv);
 		
 		NaiveBayes nb = new NaiveBayes(datasetCsv);
 		//nb.classify(datasetCsv, new String[] {"Rainy", "Hot", "High"});
-		//nb.classify(datasetCsv, new String[] {"6.3","3.3","4.7","1.6"});
-		//nb.classify(datasetCsv, new String[] {"3.5","3"});
+		//nb.classify(datasetCsv, new String[] {"great_pret", "very_crit", "complete", "more", "less_conv", "inconv", "slightly_prob", "not_recom"});
 		nb.splitTest(datasetCsv);
 	}
 
