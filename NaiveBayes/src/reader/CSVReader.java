@@ -16,7 +16,6 @@ public class CSVReader implements Reader {
 	public Dataset read(String path) throws IOException {
 		String row, label;
 		String[] data;
-		int[] dataTypes;
 		ArrayList<String> attributes;
 		HashSet<String> set = new HashSet<String>();
 		Dataset dataset = new Dataset(path);
@@ -36,33 +35,10 @@ public class CSVReader implements Reader {
 			dataset.getInstances().add(new ObjectInstance(attributes, label));
 		}
 		
-		dataTypes = new int[data.length - 1];
-		
-		for(int i = 0; i < dataTypes.length; i++) {
-			if(isNumeric(data[i])) {
-				dataTypes[i] = 1;
-			}else {
-				dataTypes[i] = 1;
-			}
-		}
-		
 		br.close();
-		dataset.setDataTypes(dataTypes);
 		dataset.setNumClass(set.size());
-		dataset.setNumAttributes(dataTypes.length);
+		dataset.setNumAttributes(data.length - 1);
 		
 		return dataset;
-	}
-	
-	public boolean isNumeric(String str) {
-		for(int i = 0; i < str.length(); i++) {
-			if(!(Character.isDigit(str.charAt(i)))) {
-				if(str.charAt(i) != '.') {
-					return false;
-				}
-			}
-		}
-		
-		return true;
 	}
 }

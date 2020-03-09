@@ -5,14 +5,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 
-import util.Statistics;
+import util.Mathematics;
 
 /** Classe que implementa o classificador NaiveBayes **/
 public class NaiveBayes {
 	
 	private HashMap<String, Integer> classOccurances; //> Armazena o numero de ocorrencias de cada classe no dataset
 	private String[] classes; //> Armazena todas as classes
-	//private ArrayList<ArrayList<ArrayList<Double>>> classStatistics; 
 	
 	/** 
 	 * Construtor da classe 
@@ -20,28 +19,7 @@ public class NaiveBayes {
 	 **/
 	public NaiveBayes(Dataset dataset) {
 		countClassOccurances(dataset);
-		//calcClassStatistics(dataset);
 	}
-	
-	/*public void calcClassStatistics(Dataset dataset) {
-		ArrayList<ArrayList<ObjectInstance>> separated = separateByClass(dataset);
-		classStatistics = new ArrayList<ArrayList<ArrayList<Double>>>();
-		ArrayList<ArrayList<Double>> instanceStatistics= new ArrayList<ArrayList<Double>>();
-		ArrayList<Double> columnStatistics = new ArrayList<Double>();
-		
-		for(int i = 0; i < dataset.getNumClass(); i++) {
-
-			instanceStatistics.clear();
-			for(int j = 0; j < dataset.getNumAttributes(); j++) {
-				if(dataset.getDataTypes()[j] == 0) {
-					columnStatistics = arrayStatisticsByColumn(separated.get(i), j);
-					instanceStatistics.add(columnStatistics);
-				}
-			}
-
-			classStatistics.add(instanceStatistics);
-		}
-	}*/
 	
 	/**
 	 * Conta o numero de ocorrencias de cada classe no dataset
@@ -87,42 +65,6 @@ public class NaiveBayes {
 	}
 	
 	/**
-	 * Calcula media e desvio padrao de um determinado atributo do dataset
-	 * @param classInstances ArrayList<ObjectInstances> - Lista de instancias
-	 * @param column int - Posicao do atributo na lista
-	 * @return double[] - Vetor [media, desvio padrao]
-	 */
-	public double[] statisticsByColumn(ArrayList<ObjectInstance> classInstances, int column) {
-		ArrayList<Double> columnData = new ArrayList<Double>(); //>Armazena os dados da coluna
-		double[] statistics = new double[2]; //> Armazena a media e o desvio padrao calculados
-		
-		// Convertendo os valores da coluna de String para double e armazenando em columnData
-		for(int i = 0; i < classInstances.size(); i++) {
-			columnData.add(Double.parseDouble(classInstances.get(i).getAttributes().get(column)));
-		}
-		
-		statistics[0] = Statistics.mean(columnData); // Calculando a media
-		statistics[1] = Statistics.stdev(columnData); // Calculando o devio padrao
-		
-		return statistics;
-	}
-	
-	/*public ArrayList<Double> arrayStatisticsByColumn(ArrayList<ObjectInstance> classInstances, int column) {
-		ArrayList<Double> columnData = new ArrayList<Double>(); //>Armazena os dados da coluna
-		ArrayList<Double> statistics = new ArrayList<Double>(); //> Armazena a media e o desvio padrao calculados
-		
-		// Convertendo os valores da coluna de String para double e armazenando em columnData
-		for(int i = 0; i < classInstances.size(); i++) {
-			columnData.add(Double.parseDouble(classInstances.get(i).getAttributes().get(column)));
-		}
-		
-		statistics.add(Statistics.mean(columnData)); // Calculando a media
-		statistics.add(Statistics.stdev(columnData)); // Calculando o devio padrao
-		
-		return statistics;
-	}*/
-	
-	/**
 	 * Calcula a probabilidade de ocorrencia de um atributo nominal para uma determinada classe
 	 * @param classInstances ArrayList<ObjectInstances> - Lista de instancias da classe
 	 * @param column int - Posicao do atributo na lista
@@ -132,7 +74,7 @@ public class NaiveBayes {
 	public double probabilityOfNominalAttribute(ArrayList<ObjectInstance> classInstances, int column, String attribute) {
 		double count = 0; //> Contagem das ocorrencias do atributo na lista
 		
-		// Conta as ocorrencias
+		// Contando as ocorrencias
 		for(ObjectInstance instance: classInstances) {
 			if(instance.getAttributes().get(column).equals(attribute)){
 				count++;
@@ -151,24 +93,14 @@ public class NaiveBayes {
 	public ArrayList<Double> calculateClassProbabilities(Dataset dataset, String[] tested, ArrayList<ArrayList<ObjectInstance>> separated) {
 		ArrayList<Double> classProbabilities = new ArrayList<Double>(); //> Armazena as probabilidades da nova instancia pertencer as classes do dataset
 		ArrayList<Double> attributeProbabilities = new ArrayList<Double>(); //> Armazena temporariamente as probabilidades para cada atributo da instancia, dadas as classes
-		double[] statistics;
-		//ArrayList<ArrayList<ObjectInstance>> separated = separateByClass(dataset);
 		
 		// Definindo a classe C a ser comparada
 		for(int i = 0; i < dataset.getNumClass(); i++) {
-			//int count = 0;
 			// Calculando as probabilidades para cada atributo da instancia, dada a classe C
 			for(int j = 0; j < dataset.getNumAttributes(); j++) {
-				if(dataset.getDataTypes()[j] == 0) { // Checando se o atributo e numerico
-					statistics = statisticsByColumn(separated.get(i), j);
-					//attributeProbabilities.add(Statistics.gaussianPdf(Double.parseDouble(tested[j]), classStatistics.get(i).get(count).get(0), classStatistics.get(i).get(count).get(1))); // Normalizando os valores numericos
-					attributeProbabilities.add(Statistics.gaussianPdf(Double.parseDouble(tested[j]), statistics[0], statistics[1]));
-					//count++;
-				} else {
-					attributeProbabilities.add(probabilityOfNominalAttribute(separated.get(i), j, tested[j]));
-				}
+				attributeProbabilities.add(probabilityOfNominalAttribute(separated.get(i), j, tested[j]));
 			}
-			classProbabilities.add(Statistics.multiplyArrayList(attributeProbabilities) * ((double)classOccurances.get(classes[i]) / dataset.getInstances().size())); // Calculando a estimativa da instancia pertencer a classe C
+			classProbabilities.add(Mathematics.multiplyArrayList(attributeProbabilities) * ((double)classOccurances.get(classes[i]) / dataset.getInstances().size())); // Calculando a estimativa da instancia pertencer a classe C
 			attributeProbabilities.clear();
 		}
 		
@@ -190,7 +122,7 @@ public class NaiveBayes {
 	 * @param classProbabilities ArrayList<Double> - Lista contendo as probabilidades para cada classe
 	 */
 	public void printResult(ArrayList<Double> classProbabilities) {
-		double sum = Statistics.sumArrayList(classProbabilities);
+		double sum = Mathematics.sumArrayList(classProbabilities);
 
 		for(int i = 0; i < classes.length; i++) {
 			System.out.println(classes[i] + ": " + (classProbabilities.get(i) / sum)*100 + "%");
@@ -203,32 +135,32 @@ public class NaiveBayes {
 	 * @param dataset Dataset - Dataset a ser operado
 	 */
 	public void splitTest(Dataset dataset) {
-		ArrayList<ObjectInstance> shuffle = dataset.getInstances();
-		Collections.shuffle(shuffle, new Random(1));
+		ArrayList<ObjectInstance> scrambled = dataset.getInstances();
+		Collections.shuffle(scrambled, new Random(1)); // Embaralhando o vetor de instâncias
 		
-		int trainSize = (66*shuffle.size())/100;
+		int trainSize = (66*scrambled.size())/100; // Definindo o tamanho do dataset de treino (66% do dataset original)
 		
-		ArrayList<ObjectInstance> trainInstances = new ArrayList<ObjectInstance>(shuffle.subList(0, trainSize));
-		ArrayList<ObjectInstance> testInstances = new ArrayList<ObjectInstance>(shuffle.subList(trainSize, shuffle.size()));
+		ArrayList<ObjectInstance> trainInstances = new ArrayList<ObjectInstance>(scrambled.subList(0, trainSize)); // Definindo as instancias de treino
+		ArrayList<ObjectInstance> testInstances = new ArrayList<ObjectInstance>(scrambled.subList(trainSize, scrambled.size())); //Definindo as instancias de teste
 		
+		// Criando o dataset de treino
 		Dataset trainSet = new Dataset("null");
 		trainSet.setInstances(trainInstances);
-		trainSet.setDataTypes(dataset.getDataTypes());
 		trainSet.setNumAttributes(dataset.getNumAttributes());
 		trainSet.setNumClass(dataset.getNumClass());
-		System.out.println(trainSet);
 		
 		double correct = 0;
 		double incorrect = 0;
 		
 		ArrayList<ArrayList<ObjectInstance>> separated = separateByClass(trainSet);
 		
+		// Classificando cada instancia de teste e checando se acertou
 		for(ObjectInstance instance : testInstances) {
 			String[] attributes = new String[trainSet.getNumAttributes()];
 			attributes = instance.getAttributes().toArray(attributes);
 			ArrayList<Double> instanceProbabilities = calculateClassProbabilities(trainSet, attributes, separated);
 			
-			int maxIdx = Statistics.findMaxIdx(instanceProbabilities);
+			int maxIdx = Mathematics.findMaxIdx(instanceProbabilities);
 			
 			if(instance.getLabel().equals(classes[maxIdx])) {
 				correct++;
@@ -237,6 +169,7 @@ public class NaiveBayes {
 			}
 		}
 		
+		// Imprimindo os resultados
 		System.out.println("correct: " + correct / testInstances.size() + "%" + " (" + correct + ")");
 		System.out.println("incorrect: " + incorrect / testInstances.size() + "%" + " (" + incorrect + ")");
 	}

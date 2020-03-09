@@ -21,7 +21,6 @@ public class ARFFReader implements Reader {
 		
 		Instances data = arff.getData();
 		String[] attributes = new String[data.numAttributes() - 1];
-		int[] dataTypes = new int[data.numAttributes() -1];
 		
 		if(data.classIndex() == -1) {
 			data.setClassIndex(data.numAttributes() - 1);
@@ -40,15 +39,6 @@ public class ARFFReader implements Reader {
 			dataset.getInstances().add(new ObjectInstance(new ArrayList<String>(Arrays.asList(attributes)), String.valueOf(data.get(i).value(data.classIndex()))));
 		}
 		
-		for(int i = 0; i < dataTypes.length; i++) {
-			if(data.get(0).attribute(i).isNumeric()) {
-				dataTypes[i] = 1;
-			}else {
-				dataTypes[i] = 1;
-			}
-		}
-		
-		dataset.setDataTypes(dataTypes);
 		dataset.setNumClass(data.numClasses());
 		dataset.setNumAttributes(data.numAttributes() - 1);
 		return dataset;

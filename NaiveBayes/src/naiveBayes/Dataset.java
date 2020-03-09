@@ -6,7 +6,6 @@ public class Dataset {
 	
 	private ArrayList<ObjectInstance> instances;
 	private String path;
-	private int[] dataTypes;
 	private int numClass;
 	private int numAttributes;
 	
@@ -38,14 +37,6 @@ public class Dataset {
 
 	public void setPath(String path) {
 		this.path = path;
-	}
-	
-	public int[] getDataTypes() {
-		return this.dataTypes;
-	}
-	
-	public void setDataTypes(int[] dataTypes) {
-		this.dataTypes = dataTypes;
 	}
 	
 	public int getNumClass() {
