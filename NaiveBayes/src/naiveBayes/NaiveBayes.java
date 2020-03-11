@@ -45,52 +45,55 @@ public class NaiveBayes {
 	/**
 	 * Separa as instancias de acordo com as classes as quais pertencem
 	 * @param dataset Dataset - Dataset a ser operado
-	 * @return ArrayList<ArrayList<ObjectInstance>> - tabela contendo todos as instancias associadas as suas respectivas classes
+	 * @return ArrayList<Dataset> - tabela contendo todos as instancias associadas as suas respectivas classes
 	 */
-	public ArrayList<ArrayList<ObjectInstance>> separateByClass(Dataset dataset){
-		ArrayList<ArrayList<ObjectInstance>> separated = new ArrayList<ArrayList<ObjectInstance>>(); //> Armazena as listas contendo as instancias relacionadas a cada classe
+	public ArrayList<Dataset> separateByClass(Dataset dataset){
+		ArrayList<Dataset> separated = new ArrayList<Dataset>(); //> Armazena os datasets relacionados a cada classe
 		
 		// Definindo a classe C a ser comparada
 		for(int i = 0; i < dataset.getNumClass(); i++) { 
 			ArrayList<ObjectInstance> temp = new ArrayList<ObjectInstance>(); //> Temporariamente armazena as instancias de C
+			Dataset classDataset = new Dataset("null");
 			// Percorrendo todo o dataset, armazenando em temp as instancias de C
 			for(ObjectInstance instance : dataset.getInstances()) {
 				if(instance.getLabel().equals(classes[i])) {
 					temp.add(instance);
 				}
 			}
-			separated.add(temp);
+			
+			// Definindo o dataset relacionado a classe C
+			classDataset.setInstances(temp);
+			classDataset.setNumAttributes(dataset.getNumAttributes());
+			classDataset.setNumClass(1);
+			classDataset.countAttributeOccurances(); // Contando e armazenando as ocorrencias dos atributos
+			
+			separated.add(classDataset);
 		}
 		return separated;
 	}
 	
 	/**
 	 * Calcula a probabilidade de ocorrencia de um atributo nominal para uma determinada classe
-	 * @param classInstances ArrayList<ObjectInstances> - Lista de instancias da classe
+	 * @param classInstances Dataset - Dataset relacionado a classe
 	 * @param column int - Posicao do atributo na lista
 	 * @param attribute String - Valor do atributo
 	 * @return double - Probabilidade de ocorrencia do atributo
 	 */
-	public double probabilityOfNominalAttribute(ArrayList<ObjectInstance> classInstances, int column, String attribute) {
-		double count = 0; //> Contagem das ocorrencias do atributo na lista
-		
-		// Contando as ocorrencias
-		for(ObjectInstance instance: classInstances) {
-			if(instance.getAttributes().get(column).equals(attribute)){
-				count++;
-			}
+	public double probabilityOfNominalAttribute(Dataset classDataset, int column, String attribute) {
+		if(classDataset.getAttributeOccurances().get(column).containsKey(attribute)) {
+			return classDataset.getAttributeOccurances().get(column).get(attribute) / classDataset.getInstances().size();
 		}
-		
-		return count / classInstances.size();
+		return 0;
 	}
 	
 	/**
 	 * Calcula as probabilidades de uma nova instancia pertencer as classes do dataset
 	 * @param dataset Dataset - Dataset a ser operado
 	 * @param tested String[] - Vetor contendo os valores de atributo da nova instancia
+	 * @param separated ArrayList<Dataset> - Lista de datasets reacionados a cada classe
 	 * @return ArrayList<Double> - Lista de probabilidades para as classes
 	 */
-	public ArrayList<Double> calculateClassProbabilities(Dataset dataset, String[] tested, ArrayList<ArrayList<ObjectInstance>> separated) {
+	public ArrayList<Double> calculateClassProbabilities(Dataset dataset, String[] tested, ArrayList<Dataset> separated) {
 		ArrayList<Double> classProbabilities = new ArrayList<Double>(); //> Armazena as probabilidades da nova instancia pertencer as classes do dataset
 		ArrayList<Double> attributeProbabilities = new ArrayList<Double>(); //> Armazena temporariamente as probabilidades para cada atributo da instancia, dadas as classes
 		
@@ -152,7 +155,7 @@ public class NaiveBayes {
 		double correct = 0;
 		double incorrect = 0;
 		
-		ArrayList<ArrayList<ObjectInstance>> separated = separateByClass(trainSet);
+		ArrayList<Dataset> separated = separateByClass(trainSet);
 		
 		// Classificando cada instancia de teste e checando se acertou
 		for(ObjectInstance instance : testInstances) {
@@ -170,7 +173,7 @@ public class NaiveBayes {
 		}
 		
 		// Imprimindo os resultados
-		System.out.println("correct: " + correct / testInstances.size() + "%" + " (" + correct + ")");
-		System.out.println("incorrect: " + incorrect / testInstances.size() + "%" + " (" + incorrect + ")");
+		System.out.println("correct: " + correct / testInstances.size() * 100 + "%" + " (" + correct + ")");
+		System.out.println("incorrect: " + incorrect / testInstances.size() * 100 + "%" + " (" + incorrect + ")");
 	}
 }

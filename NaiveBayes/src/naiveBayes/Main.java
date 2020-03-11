@@ -13,6 +13,7 @@ public class Main {
 		CSVReader csvReader = new CSVReader();
 		//datasetCsv = csvReader.read("src/resources/PlayGolf.csv");
 		datasetCsv = csvReader.read("src/resources/nursery_data.csv");
+		datasetCsv.countAttributeOccurances();
 		//System.out.println(datasetCsv);
 		
 		NaiveBayes nb = new NaiveBayes(datasetCsv);
