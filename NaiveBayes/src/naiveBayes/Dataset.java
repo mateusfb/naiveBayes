@@ -3,24 +3,33 @@ package naiveBayes;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/** Classe responsavel por armazenar as informaçoes de uma base de dados **/
 public class Dataset {
 	
-	private ArrayList<ObjectInstance> instances;
-	private String path;
-	private int numClass;
-	private int numAttributes;
-	private ArrayList<HashMap<String, Double>> attributeOccurances;
+	private ArrayList<ObjectInstance> instances; //> Lista de instancias da base
+	private String path; //> Caminho do arquivo da base
+	private int numClass; //> Numero de classes da base
+	private int numAttributes; //> Numero de atributos da base
+	private ArrayList<HashMap<String, Double>> attributeOccurances; //> Lista contendo as ocorrencias de cada possivel atributo, para cada coluna da base
 	
-	public Dataset(String path) {
-		this.path = path;
+	/**
+	 * Construtor da classe
+	 */
+	public Dataset() {
 		this.instances = new ArrayList<ObjectInstance>();
 	}
 	
+	
+	/**
+	 * Conta as ocorrencias de cada possivel atributo da base
+	 */
 	public void countAttributeOccurances() {
 		attributeOccurances = new ArrayList<HashMap<String, Double>>();
 	
+		// Iterando sobre cada coluna de atributos da base
 		for(int i = 0; i < numAttributes; i++) {
 			HashMap<String, Double> occurances = new HashMap<>();
+			// Iterando sobre cada instancia da base e contando as ocorrencias dos atributos
 			for(ObjectInstance instance: instances) {
 				if(occurances.containsKey(instance.getAttributes().get(i))) {
 					occurances.put(instance.getAttributes().get(i), occurances.get(instance.getAttributes().get(i)) + 1);
@@ -33,13 +42,18 @@ public class Dataset {
 		}
 	}
 	
+	/**
+	 * Retorna uma string representando o dataset
+	 * @return String - representacao do dataset
+	 */
 	public String toString() {
-		String row = "";
+		String data = "";
 		
+		// Iterando sobre cada linha do dataset e adicionando a string data
 		for(int i = 0; i < instances.size(); i++) {
-			row += instances.get(i).getAttributes().toString() + instances.get(i).getLabel() + "\n";
+			data += instances.get(i).getAttributes().toString() + instances.get(i).getLabel() + "\n";
 		}
-		return row;
+		return data;
 	}
 
 	public ArrayList<ObjectInstance> getInstances() {

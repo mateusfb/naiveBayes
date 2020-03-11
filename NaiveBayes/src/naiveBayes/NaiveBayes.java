@@ -10,7 +10,7 @@ import util.Mathematics;
 /** Classe que implementa o classificador NaiveBayes **/
 public class NaiveBayes {
 	
-	private HashMap<String, Integer> classOccurances; //> Armazena o numero de ocorrencias de cada classe no dataset
+	private HashMap<String, Double> classOccurances; //> Armazena o numero de ocorrencias de cada classe no dataset
 	private String[] classes; //> Armazena todas as classes
 	
 	/** 
@@ -28,18 +28,17 @@ public class NaiveBayes {
 	public void countClassOccurances(Dataset dataset){
 		this.classes = new String[dataset.getNumClass()];
 		classOccurances = new HashMap<>();
-		int count = 0; //> Contador do numero de classes distintas
 		
-		// Contando as ocorrencias e registrando as classes
+		// Iterando sobre as instancias do dataset, contando as ocorrencias de cada classe
 		for(int i = 0; i < dataset.getInstances().size(); i++) {
 			if(classOccurances.containsKey(dataset.getInstances().get(i).getLabel())) {
 				classOccurances.put(dataset.getInstances().get(i).getLabel(), classOccurances.get(dataset.getInstances().get(i).getLabel()) + 1);
 			}else {
-				classOccurances.put(dataset.getInstances().get(i).getLabel(), 1);
-				classes[count] = dataset.getInstances().get(i).getLabel();
-				count++;
+				classOccurances.put(dataset.getInstances().get(i).getLabel(), 1.0);
 			}
 		}
+		
+		this.classes = classOccurances.keySet().toArray(classes); // Armazenando todas as classes distintas
 	}
 	
 	/**
@@ -50,11 +49,11 @@ public class NaiveBayes {
 	public ArrayList<Dataset> separateByClass(Dataset dataset){
 		ArrayList<Dataset> separated = new ArrayList<Dataset>(); //> Armazena os datasets relacionados a cada classe
 		
-		// Definindo a classe C a ser comparada
+		// Iterando sobre as classes do dataset (escolhendo uma classe C por vez para sem comparada)
 		for(int i = 0; i < dataset.getNumClass(); i++) { 
 			ArrayList<ObjectInstance> temp = new ArrayList<ObjectInstance>(); //> Temporariamente armazena as instancias de C
-			Dataset classDataset = new Dataset("null");
-			// Percorrendo todo o dataset, armazenando em temp as instancias de C
+			Dataset classDataset = new Dataset();
+			// Iterando sobre as instancias do dataset, armazenando em temp as que tem o rotulo C
 			for(ObjectInstance instance : dataset.getInstances()) {
 				if(instance.getLabel().equals(classes[i])) {
 					temp.add(instance);
@@ -80,8 +79,8 @@ public class NaiveBayes {
 	 * @return double - Probabilidade de ocorrencia do atributo
 	 */
 	public double probabilityOfNominalAttribute(Dataset classDataset, int column, String attribute) {
-		if(classDataset.getAttributeOccurances().get(column).containsKey(attribute)) {
-			return classDataset.getAttributeOccurances().get(column).get(attribute) / classDataset.getInstances().size();
+		if(classDataset.getAttributeOccurances().get(column).containsKey(attribute)) { // Checando se a coluna de posicao column no dataset possui o atributo
+			return classDataset.getAttributeOccurances().get(column).get(attribute) / classDataset.getInstances().size(); // Se possui o atributo, calcula sua probabilidade
 		}
 		return 0;
 	}
@@ -97,9 +96,9 @@ public class NaiveBayes {
 		ArrayList<Double> classProbabilities = new ArrayList<Double>(); //> Armazena as probabilidades da nova instancia pertencer as classes do dataset
 		ArrayList<Double> attributeProbabilities = new ArrayList<Double>(); //> Armazena temporariamente as probabilidades para cada atributo da instancia, dadas as classes
 		
-		// Definindo a classe C a ser comparada
+		// Iterando sobre as classes do dataset (escolhendo uma classe C a ser comparada)
 		for(int i = 0; i < dataset.getNumClass(); i++) {
-			// Calculando as probabilidades para cada atributo da instancia, dada a classe C
+			// Iterando sobre os atributos(colunas) do dataset, calculando as probabilidades para cada atributo da instancia de teste, dada a classe C
 			for(int j = 0; j < dataset.getNumAttributes(); j++) {
 				attributeProbabilities.add(probabilityOfNominalAttribute(separated.get(i), j, tested[j]));
 			}
@@ -127,6 +126,7 @@ public class NaiveBayes {
 	public void printResult(ArrayList<Double> classProbabilities) {
 		double sum = Mathematics.sumArrayList(classProbabilities);
 
+		// Iterando sobre o vetor de probabilidades e exibindo os resultados
 		for(int i = 0; i < classes.length; i++) {
 			System.out.println(classes[i] + ": " + (classProbabilities.get(i) / sum)*100 + "%");
 		}
@@ -147,7 +147,7 @@ public class NaiveBayes {
 		ArrayList<ObjectInstance> testInstances = new ArrayList<ObjectInstance>(scrambled.subList(trainSize, scrambled.size())); //Definindo as instancias de teste
 		
 		// Criando o dataset de treino
-		Dataset trainSet = new Dataset("null");
+		Dataset trainSet = new Dataset();
 		trainSet.setInstances(trainInstances);
 		trainSet.setNumAttributes(dataset.getNumAttributes());
 		trainSet.setNumClass(dataset.getNumClass());
@@ -157,7 +157,7 @@ public class NaiveBayes {
 		
 		ArrayList<Dataset> separated = separateByClass(trainSet);
 		
-		// Classificando cada instancia de teste e checando se acertou
+		// Iterando sobre as instancias de teste, classificando e checando se acertou
 		for(ObjectInstance instance : testInstances) {
 			String[] attributes = new String[trainSet.getNumAttributes()];
 			attributes = instance.getAttributes().toArray(attributes);

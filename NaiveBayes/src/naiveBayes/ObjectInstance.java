@@ -1,11 +1,11 @@
 package naiveBayes;
 
 import java.util.ArrayList;
-
+/** Classe responsavel por armazenar as informacoes de uma instancia **/
 public class ObjectInstance {
 	
-	private ArrayList<String> attributes;
-	private String label;
+	private ArrayList<String> attributes; //> Vetor de atributos da instancia
+	private String label; //> Rotulo/Classe da instancia
 	
 	public ObjectInstance(ArrayList<String> attributes, String label) {
 		this.attributes = attributes;

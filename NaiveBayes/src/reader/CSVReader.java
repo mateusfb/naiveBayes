@@ -13,12 +13,18 @@ import naiveBayes.ObjectInstance;
 public class CSVReader implements Reader {
 
 	@Override
+	/**
+	 * Le uma base no formato csv e armazena seus dados em um Dataset
+	 * @param path String - Caminho do arquivo contendo a base
+	 * @return Dataset - Dataset contendo as informacoes da base
+	 * @trhows IOException
+	 */
 	public Dataset read(String path) throws IOException {
 		String row, label;
 		String[] data;
 		ArrayList<String> attributes;
 		HashSet<String> set = new HashSet<String>();
-		Dataset dataset = new Dataset(path);
+		Dataset dataset = new Dataset();
 		
 		BufferedReader br = new BufferedReader(new FileReader(path));
 		
@@ -36,6 +42,7 @@ public class CSVReader implements Reader {
 		}
 		
 		br.close();
+		dataset.setPath(path);
 		dataset.setNumClass(set.size());
 		dataset.setNumAttributes(data.length - 1);
 		

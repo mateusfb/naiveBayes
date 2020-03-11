@@ -2,7 +2,6 @@ package naiveBayes;
 
 import java.io.IOException;
 
-//import reader.ARFFReader;
 import reader.CSVReader;
 
 public class Main {
