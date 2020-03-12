@@ -11,7 +11,7 @@ import util.Mathematics;
 public class NaiveBayes {
 	
 	private HashMap<String, Double> classOccurances; //> Armazena o numero de ocorrencias de cada classe no dataset
-	private String[] classes; //> Armazena todas as classes
+	private String[] classes; //> Armazena todas as possiveis classes do dataset
 	
 	/** 
 	 * Construtor da classe 
@@ -42,9 +42,9 @@ public class NaiveBayes {
 	}
 	
 	/**
-	 * Separa as instancias de acordo com as classes as quais pertencem
+	 * Separa as instancias de acordo com suas classes
 	 * @param dataset Dataset - Dataset a ser operado
-	 * @return ArrayList<Dataset> - tabela contendo todos as instancias associadas as suas respectivas classes
+	 * @return ArrayList<Dataset> - Lista de tabelas contendo as instancias pertencentes a cada classe
 	 */
 	public ArrayList<Dataset> separateByClass(Dataset dataset){
 		ArrayList<Dataset> separated = new ArrayList<Dataset>(); //> Armazena os datasets relacionados a cada classe
