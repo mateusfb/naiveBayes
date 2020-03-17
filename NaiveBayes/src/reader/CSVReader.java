@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
-import naiveBayes.Dataset;
-import naiveBayes.ObjectInstance;
+import data.Dataset;
+import data.ObjectInstance;
 
 public class CSVReader implements Reader {
 

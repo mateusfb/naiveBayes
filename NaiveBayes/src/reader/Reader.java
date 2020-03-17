@@ -2,7 +2,7 @@ package reader;
 
 import java.io.IOException;
 
-import naiveBayes.Dataset;
+import data.Dataset;
 
 /** Interface que determina um metodo de leitura de base**/
 public interface Reader {

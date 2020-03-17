@@ -1,4 +1,4 @@
-package naiveBayes;
+package data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,10 +31,10 @@ public class Dataset {
 			HashMap<String, Double> occurances = new HashMap<>();
 			// Iterando sobre cada instancia da base e contando as ocorrencias dos atributos
 			for(ObjectInstance instance: instances) {
-				if(occurances.containsKey(instance.getAttributes().get(i))) {
-					occurances.put(instance.getAttributes().get(i), occurances.get(instance.getAttributes().get(i)) + 1);
+				if(occurances.containsKey(instance.getValues().get(i))) {
+					occurances.put(instance.getValues().get(i), occurances.get(instance.getValues().get(i)) + 1);
 				}else {
-					occurances.put(instance.getAttributes().get(i), 1.0);
+					occurances.put(instance.getValues().get(i), 1.0);
 				}
 			}
 			
@@ -51,7 +51,7 @@ public class Dataset {
 		
 		// Iterando sobre cada linha do dataset e adicionando a string data
 		for(int i = 0; i < instances.size(); i++) {
-			data += instances.get(i).getAttributes().toString() + instances.get(i).getLabel() + "\n";
+			data += instances.get(i).getValues().toString() + instances.get(i).getLabel() + "\n";
 		}
 		return data;
 	}

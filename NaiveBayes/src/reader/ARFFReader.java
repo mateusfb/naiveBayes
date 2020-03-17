@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import naiveBayes.Dataset;
-import naiveBayes.ObjectInstance;
+import data.Dataset;
+import data.ObjectInstance;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader.ArffReader;
 
